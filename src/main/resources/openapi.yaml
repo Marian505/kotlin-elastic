@@ -1,0 +1,422 @@
+openapi: 3.0.1
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+  - url: http://localhost:8080
+    description: Generated server url
+paths:
+  /api/movies:
+    get:
+      tags:
+        - movie-controller
+      operationId: getAll
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieDto"
+    post:
+      tags:
+        - movie-controller
+      operationId: storeMovie
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MovieDto"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/MovieEntity"
+  /api/movies/create-index:
+    post:
+      tags:
+        - movie-controller
+      operationId: createIndex
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: boolean
+  /api/movies/{id}:
+    get:
+      tags:
+        - movie-controller
+      operationId: getById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/MovieDto"
+    delete:
+      tags:
+        - movie-controller
+      operationId: deleteById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/Unit"
+  /api/movies/title:
+    get:
+      tags:
+        - movie-controller
+      operationId: findByTitle
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieDto"
+  /api/movies/search-title-year-genre:
+    get:
+      tags:
+        - movie-controller
+      operationId: advancedSearch
+      parameters:
+        - name: title
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: year
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: genre
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieDto"
+  /api/movies/search-genre-director-actor-year:
+    get:
+      tags:
+        - movie-controller
+      operationId: advanceSearch
+      parameters:
+        - name: genre
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: director
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: actor
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: startYear
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: endYear
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/PairListMovieDtoLong"
+  /api/movies/search-director-or-actor:
+    get:
+      tags:
+        - movie-controller
+      operationId: searchDirectorOrActor
+      parameters:
+        - name: director
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: actor
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieDto"
+  /api/movies/search-between-years:
+    get:
+      tags:
+        - movie-controller
+      operationId: searchBetweenYears
+      parameters:
+        - name: startYear
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+        - name: endYear
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MovieDto"
+  /api/movies/all-with-profile:
+    get:
+      tags:
+        - movie-controller
+      operationId: getAllWithProfile
+      responses:
+        "200":
+          description: OK
+          content:
+            "*/*":
+              schema:
+                $ref: "#/components/schemas/PairListMovieDtoProfileDto"
+components:
+  schemas:
+    MovieDto:
+      required:
+        - actors
+        - awards
+        - country
+        - director
+        - genre
+        - imdbId
+        - imdbRating
+        - language
+        - rated
+        - released
+        - runtime
+        - title
+        - type
+        - writer
+        - year
+      type: object
+      properties:
+        title:
+          type: string
+        year:
+          type: integer
+          format: int32
+        rated:
+          type: string
+        released:
+          type: string
+        runtime:
+          type: string
+        genre:
+          type: string
+        director:
+          type: string
+        writer:
+          type: string
+        actors:
+          type: string
+        language:
+          type: string
+        country:
+          type: string
+        awards:
+          type: string
+        imdbRating:
+          type: number
+          format: float
+        imdbId:
+          type: string
+        type:
+          type: string
+    MovieEntity:
+      required:
+        - Actors
+        - Awards
+        - Country
+        - Director
+        - Genre
+        - Language
+        - Rated
+        - Released
+        - Runtime
+        - Title
+        - Type
+        - Writer
+        - Year
+        - imdbID
+        - imdbRating
+      type: object
+      properties:
+        Title:
+          type: string
+        Year:
+          type: integer
+          format: int32
+        Rated:
+          type: string
+        Released:
+          type: string
+        Runtime:
+          type: string
+        Genre:
+          type: string
+        Director:
+          type: string
+        Writer:
+          type: string
+        Actors:
+          type: string
+        Language:
+          type: string
+        Country:
+          type: string
+        Awards:
+          type: string
+        imdbRating:
+          type: number
+          format: float
+        imdbID:
+          type: string
+        Type:
+          type: string
+    PairListMovieDtoLong:
+      required:
+        - first
+        - second
+      type: object
+      properties:
+        first:
+          type: array
+          items:
+            $ref: "#/components/schemas/MovieDto"
+        second:
+          type: integer
+          format: int64
+    PairListMovieDtoProfileDto:
+      required:
+        - first
+        - second
+      type: object
+      properties:
+        first:
+          type: array
+          items:
+            $ref: "#/components/schemas/MovieDto"
+        second:
+          $ref: "#/components/schemas/ProfileDto"
+    ProfileDto:
+      required:
+        - shards
+      type: object
+      properties:
+        shards:
+          type: array
+          items:
+            $ref: "#/components/schemas/ShardDto"
+    QueryDto:
+      required:
+        - breakdown
+        - description
+        - timeInNanos
+        - type
+      type: object
+      properties:
+        type:
+          type: string
+        description:
+          type: string
+        timeInNanos:
+          type: integer
+          format: int64
+        breakdown:
+          type: object
+          additionalProperties:
+            type: integer
+            format: int64
+    SearchDto:
+      required:
+        - query
+      type: object
+      properties:
+        query:
+          type: array
+          items:
+            $ref: "#/components/schemas/QueryDto"
+    ShardDto:
+      required:
+        - id
+        - searches
+      type: object
+      properties:
+        id:
+          type: string
+        searches:
+          type: array
+          items:
+            $ref: "#/components/schemas/SearchDto"
+    Unit:
+      type: object
